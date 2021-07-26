@@ -29,8 +29,11 @@ const userSchema = new mongoose.Schema({
     },
     message: "Passwords don't match, please try again",
   },
+  passwordChangedAt: Date,
 });
 
+// ****************************************************************
+//* Encrypt password
 userSchema.pre("save", async function (next) {
   //only run this if password was modified
   if (!this.isModified("password")) return next(); //this 'isModified' is a mongoose method
@@ -43,13 +46,26 @@ userSchema.pre("save", async function (next) {
 
   next();
 });
-
+// ********************************************************
 userSchema.methods.checkPassword = async function (
   requestedPassword,
   passwordInDatabase
 ) {
   return await bcrypt.compare(requestedPassword, passwordInDatabase);
 };
+
+// ****************************************************************
+
+//* check if password is changed after receiving jwt token
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(this.passwordChangedAt).getTime() / 1000;
+    return JWTTimestamp < changedTimestamp;
+  }
+  return false;
+};
+
+// ****************************************************************
 
 const User = mongoose.model("User", userSchema);
 

@@ -1,12 +1,13 @@
 const express = require("express");
 const askController = require("../controllers/askController");
+const authController = require("../controllers/authController");
 
 const router = express.Router();
 
 router
   .route("/")
   .post(askController.askQuestion)
-  .get(askController.showAllQuestions);
+  .get(authController.protect, askController.showAllQuestions);
 
 router
   .route("/:id")
