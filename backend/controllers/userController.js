@@ -1,3 +1,4 @@
-exports.getAllUsers = async (req, res) => {
-  res.status(200).json("ok");
-};
+const User = require("../models/userModel");
+const handleFactory = require("./handleFactory");
+
+exports.getAllUsers = handleFactory.getAll(User);
