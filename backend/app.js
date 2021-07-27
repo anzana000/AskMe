@@ -7,6 +7,7 @@ const globalErrorHandler = require("./controllers/errorController");
 
 const askRouter = require("./routes/askRoute");
 const userRouter = require("./routes/userRoute");
+const answerRouter = require("./routes/answerRoute");
 const app = express();
 
 //Milddlewares
@@ -18,6 +19,7 @@ app.use(morgan("dev"));
 //Routes
 app.use("/api/v1/ask", askRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/answers", answerRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));

@@ -4,16 +4,18 @@ const APIFeatures = require("../utils/apiFeatures");
 
 exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    const newQuestion = await Question.create(req.body);
+    const newQuestion = await Model.create(req.body);
     res.status(201).json({
       status: "success",
       data: newQuestion,
     });
   });
 
-exports.getOne = (Model) =>
+exports.getOne = (Model, popOption) =>
   catchAsync(async (req, res, next) => {
-    const doc = await Model.findById(req.params.id);
+    let query = Model.findById(req.params.id);
+    if (popOption) query = query.populate(popOption);
+    const doc = await query;
 
     if (!doc) {
       return next(new AppError("No document found with that id", 404));
@@ -26,17 +28,27 @@ exports.getOne = (Model) =>
 
 exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
-    const features = new APIFeatures(Model.find(), req.query)
+    //To allow for nested GET review on Question {hack}
+    let filter = {};
+    if (req.params.askId) filter = { question: req.params.askId };
+
+    //*EXECUTE QUERY
+    const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
       .sort()
-      .paginate()
-      .limitFields();
+      .limitFields()
+      .paginate();
+    // const doc = await features.query.explain();
     const doc = await features.query;
 
+    //*SEND RESPONSE
     res.status(200).json({
       status: "success",
+
       results: doc.length,
-      data: doc,
+      data: {
+        data: doc,
+      },
     });
   });
 
@@ -55,7 +67,7 @@ exports.deleteOne = (Model) =>
 
 exports.updateOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    const question = await Question.findByIdAndUpdate(
+    const question = await Model.findByIdAndUpdate(
       req.params.id,
       { question: req.body.question },
       {
@@ -65,7 +77,7 @@ exports.updateOne = (Model) =>
     );
 
     if (!question) {
-      return next(new AppError("No question found with that id", 404));
+      return next(new AppError("No document found with that id", 404));
     }
     res.status(201).json({
       status: "success",

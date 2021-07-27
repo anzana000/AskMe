@@ -2,35 +2,41 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "Please provide your name"],
-    trim: true,
-  },
-  email: {
-    type: String,
-    required: [true, "Please provide your email"],
-    validate: [validator.isEmail, "Please provide a valid email"],
-  },
-  photo: String,
-  password: {
-    type: String,
-    required: [true, "Password field is required"],
-    minlength: 8,
-    select: false,
-  },
-  confirmPassword: {
-    type: String,
-    required: [true, "Please confirm your password"],
-    validator: function (el) {
-      // this 'el' refers to confirmPassword field
-      return el === this.password;
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Please provide your name"],
+      trim: true,
     },
-    message: "Passwords don't match, please try again",
+    email: {
+      type: String,
+      required: [true, "Please provide your email"],
+      validate: [validator.isEmail, "Please provide a valid email"],
+    },
+    photo: String,
+    password: {
+      type: String,
+      required: [true, "Password field is required"],
+      minlength: 8,
+      select: false,
+    },
+    confirmPassword: {
+      type: String,
+      required: [true, "Please confirm your password"],
+      validator: function (el) {
+        // this 'el' refers to confirmPassword field
+        return el === this.password;
+      },
+      message: "Passwords don't match, please try again",
+    },
+    passwordChangedAt: Date,
   },
-  passwordChangedAt: Date,
-});
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
 
 // ****************************************************************
 //* Encrypt password
