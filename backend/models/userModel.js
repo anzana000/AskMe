@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide your email"],
       validate: [validator.isEmail, "Please provide a valid email"],
+      unique: [true, "An email must be unique"],
     },
     photo: String,
     password: {
@@ -29,6 +30,11 @@ const userSchema = new mongoose.Schema(
         return el === this.password;
       },
       message: "Passwords don't match, please try again",
+    },
+    role: {
+      type: String,
+      enum: ["admin", "user"],
+      default: "user",
     },
     passwordChangedAt: Date,
   },

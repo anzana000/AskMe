@@ -9,6 +9,6 @@ exports.showAllQuestions = handleFactory.getAll(Question);
 
 exports.getQuestion = handleFactory.getOne(Question);
 
-exports.deleteQuestion = handleFactory.deleteOne(Question);
+exports.deleteQuestion = handleFactory.deleteOne(Question, "question"); //this "question" is for identifying if it's question or answer
 
-exports.updateQuestion = handleFactory.updateOne(Question);
+exports.updateQuestion = handleFactory.updateOne(Question, "question");

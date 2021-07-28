@@ -12,4 +12,10 @@ router
   .get(answerController.getAllAnswers)
   .post(answerController.setTourUserIds, answerController.createAnswer);
 
+router
+  .route("/:id")
+  .get(answerController.getAnswer)
+  .patch(answerController.updateAnswer)
+  .delete(answerController.deleteAnswer);
+
 module.exports = router;

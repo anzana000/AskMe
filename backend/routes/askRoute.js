@@ -5,17 +5,17 @@ const answerRouter = require("./answerRoute");
 
 const router = express.Router();
 
+router.use("/:askId/answers", answerRouter);
+
 router
   .route("/")
-  .post(askController.askQuestion)
+  .post(authController.protect, askController.askQuestion)
   .get(authController.protect, askController.showAllQuestions);
 
 router
   .route("/:id")
-  .get(askController.getQuestion)
-  .delete(askController.deleteQuestion)
-  .patch(askController.updateQuestion);
-
-router.use("/:askId/answers", answerRouter);
+  .get(authController.protect, askController.getQuestion)
+  .delete(authController.protect, askController.deleteQuestion)
+  .patch(authController.protect, askController.updateQuestion);
 
 module.exports = router;

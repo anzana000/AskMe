@@ -10,4 +10,7 @@ exports.setTourUserIds = (req, res, next) => {
 };
 
 exports.getAllAnswers = handleFactory.getAll(Answer);
+exports.getAnswer = handleFactory.getOne(Answer);
 exports.createAnswer = handleFactory.createOne(Answer);
+exports.updateAnswer = handleFactory.updateOne(Answer, "answer");
+exports.deleteAnswer = handleFactory.deleteOne(Answer, "answer");
