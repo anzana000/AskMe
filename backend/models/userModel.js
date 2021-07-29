@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema(
     },
     passwordChangedAt: Date,
     passwordResetToken: String,
-    passwordResetExpire: Date,
+    passwordResetExpires: Date,
   },
   {
     toJSON: { virtuals: true },
@@ -74,7 +74,7 @@ userSchema.methods.checkPassword = async function (
 //* check if password is changed after receiving jwt token
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   if (this.passwordChangedAt) {
-    const changedTimestamp = parseInt(this.passwordChangedAt).getTime() / 1000;
+    const changedTimestamp = parseInt(this.passwordChangedAt.getTime() / 1000);
     return JWTTimestamp < changedTimestamp;
   }
   return false;
@@ -96,6 +96,16 @@ userSchema.methods.createPasswordResetToken = function () {
 
   return resetToken;
 };
+// ****************************************************************
+
+//reset password
+userSchema.pre("save", function (next) {
+  //only run this function if password was actually modified
+  if (!this.isModified("password") || this.isNew) return next();
+
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
 
 const User = mongoose.model("User", userSchema);
 

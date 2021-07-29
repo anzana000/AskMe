@@ -4,6 +4,7 @@ const AppError = require("../utils/appError");
 const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 const sendEmail = require("../utils/email");
+const crypto = require("crypto");
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -116,27 +117,33 @@ exports.restrictTo = (...roles) => {
 };
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
-  // 1) GEt user based on posted email
-  const user = await User.find({ email: req.body.email });
+  // 1) Get user based on POSTed email
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return next(new AppError("There is no user with that email", 404));
+  }
 
-  if (!user) return next(new AppError("No user found with that email", 404));
-  // 2)Generate random reset token
+  // 2)Generate the random reset token
   const resetToken = user.createPasswordResetToken();
-
   await user.save({ validateBeforeSave: false });
 
   // 3)Send it to users email
-  const resetURL = `${req.protocol}:${req.get(
+  const resetURL = `${req.protocol}://${req.get(
     "host"
   )}/api/v1/users/resetPassword/${resetToken}`;
+
   const message = `Forgot your password? Submit a PATCH request with your new password
    and password confirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email`;
 
   try {
     await sendEmail({
       email: user.email,
-      subject: "Your password reset token (valid for 10 minutes!)",
+      subject: "Your password reset token (valid for 10 min)",
       message,
+    });
+    res.status(200).json({
+      status: "success",
+      message: "Token sent to your email",
     });
   } catch (err) {
     (user.passwordResetToken = undefined),
@@ -144,7 +151,48 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
       await user.save({ validateBeforeSave: false });
 
     return next(
-      new AppError("There was an error sending email, try again later", 500)
+      new AppError("There was an error sending email. Try again later!", 500)
     );
   }
+});
+
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  // 1) Get user based on token
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(req.params.token)
+    .digest("hex");
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() },
+  });
+  // 2) If token hasn't expired & there's a user,set the new password
+  if (!user) return next(new AppError("Token invalid or expired", 400));
+  user.password = req.body.password;
+  user.confirmPassword = req.body.confirmPassword;
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+
+  await user.save();
+
+  // 3) Update Password changed at property
+  // 4) Login and send JWT
+  sendResponseWithToken(user, 201, res);
+});
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  // 1) Get user from collection
+  const user = await User.findById(req.user._id).select("+password");
+
+  // 2) Check if posted current password is correct
+  if (!(await user.checkPassword(req.body.currentPassword, user.password)))
+    return next(new AppError("Your current password is incorrect", 201));
+
+  // 3) If so, update password
+  user.password = req.body.password;
+  user.confirmPassword = req.body.confirmPassword;
+  await user.save();
+
+  // 4) log user in ,send jwt
+  sendResponseWithToken(user, 200, res);
 });
