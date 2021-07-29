@@ -37,6 +37,11 @@ const userSchema = new mongoose.Schema(
       enum: ["admin", "user"],
       default: "user",
     },
+    active: {
+      type: Boolean,
+      default: true,
+      select: false,
+    },
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
@@ -106,6 +111,16 @@ userSchema.pre("save", function (next) {
   this.passwordChangedAt = Date.now() - 1000;
   next();
 });
+
+// ****************************************************************
+//not getting inactive users
+userSchema.pre(/^find/, function (next) {
+  //This point's to current query
+  this.find({ active: { $ne: false } });
+  next();
+});
+
+// ****************************************************************
 
 const User = mongoose.model("User", userSchema);
 
