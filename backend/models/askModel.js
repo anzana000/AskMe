@@ -18,6 +18,12 @@ const askSchema = new mongoose.Schema(
         required: [true, "Question must belong to a user"],
       },
     ],
+    noOfLikes: Number,
+    likes: [
+      {
+        type: mongoose.ObjectId,
+      },
+    ],
   },
   {
     toJSON: { virtuals: true },

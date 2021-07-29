@@ -4,18 +4,22 @@ const authController = require("../controllers/authController");
 const answerRouter = require("./answerRoute");
 
 const router = express.Router();
+const nestedRouter = express.Router({ mergeParams: true });
 
 router.use("/:askId/answers", answerRouter);
+router.use("/:like/likes", nestedRouter);
 
 router
   .route("/")
   .post(authController.protect, askController.askQuestion)
-  .get(authController.protect, askController.showAllQuestions);
+  .get(askController.showAllQuestions);
 
 router
   .route("/:id")
-  .get(authController.protect, askController.getQuestion)
+  .get(askController.getQuestion)
   .delete(authController.protect, askController.deleteQuestion)
   .patch(authController.protect, askController.updateQuestion);
+
+nestedRouter.patch("/", authController.protect, askController.addLike);
 
 module.exports = router;

@@ -6,6 +6,9 @@ exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
     if (!req.body.user) req.body.user = req.user;
     if (req.body.role) delete req.body.role;
+    if (req.body.like) delete req.body.like;
+    if (req.body.noOfLikes) delete req.body.noOfLikes;
+
     const doc = await Model.create(req.body);
     res.status(201).json({
       status: "success",
