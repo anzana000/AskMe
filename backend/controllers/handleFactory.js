@@ -6,10 +6,10 @@ exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
     if (!req.body.user) req.body.user = req.user;
     if (req.body.role) delete req.body.role;
-    const newQuestion = await Model.create(req.body);
+    const doc = await Model.create(req.body);
     res.status(201).json({
       status: "success",
-      data: newQuestion,
+      data: doc,
     });
   });
 

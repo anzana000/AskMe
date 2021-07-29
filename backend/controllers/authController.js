@@ -3,6 +3,7 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
+const sendEmail = require("../utils/email");
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -107,9 +108,43 @@ exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role))
       return next(
-        new AppError("You are not allowed to perform this action", 403)
+        new AppError("You are not authorized to perform this action", 403)
       );
 
     next();
   };
 };
+
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  // 1) GEt user based on posted email
+  const user = await User.find({ email: req.body.email });
+
+  if (!user) return next(new AppError("No user found with that email", 404));
+  // 2)Generate random reset token
+  const resetToken = user.createPasswordResetToken();
+
+  await user.save({ validateBeforeSave: false });
+
+  // 3)Send it to users email
+  const resetURL = `${req.protocol}:${req.get(
+    "host"
+  )}/api/v1/users/resetPassword/${resetToken}`;
+  const message = `Forgot your password? Submit a PATCH request with your new password
+   and password confirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email`;
+
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: "Your password reset token (valid for 10 minutes!)",
+      message,
+    });
+  } catch (err) {
+    (user.passwordResetToken = undefined),
+      (user.passwordResetExpires = undefined),
+      await user.save({ validateBeforeSave: false });
+
+    return next(
+      new AppError("There was an error sending email, try again later", 500)
+    );
+  }
+});
