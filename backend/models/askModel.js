@@ -18,7 +18,7 @@ const askSchema = new mongoose.Schema(
         required: [true, "Question must belong to a user"],
       },
     ],
-    noOfLikes: Number,
+
     likes: [
       {
         type: mongoose.ObjectId,
@@ -30,6 +30,11 @@ const askSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+//virtual like
+askSchema.virtual("noOfLikes").get(function () {
+  return this.likes.length;
+});
 
 //Virtual populate
 askSchema.virtual("answers", {

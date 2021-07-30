@@ -16,7 +16,7 @@ exports.updateQuestion = handleFactory.updateOne(Question, "question");
 exports.addLike = catchAsync(async (req, res, next) => {
   const preventDuplicate = await Question.findById(req.params.like);
   if (preventDuplicate.likes.includes(req.user.id)) {
-    const question = await Question.findOneAndUpdate(
+    await Question.findOneAndUpdate(
       { _id: req.params.like },
       { $pull: { likes: req.user.id } }
     );
@@ -25,7 +25,7 @@ exports.addLike = catchAsync(async (req, res, next) => {
       status: "success",
     });
   } else {
-    const question = await Question.findOneAndUpdate(
+    await Question.findOneAndUpdate(
       { _id: req.params.like },
       { $push: { likes: req.user.id } }
     );
