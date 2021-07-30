@@ -3,11 +3,11 @@ const dotenv = require("dotenv");
 
 // Catching uncaught exceptions
 
-process.on("uncaughtException", (err) => {
-  console.log(err.name, err.message);
-  console.log("UNHANDLED EXCEPTION 💥 Shutting down...");
-  process.exit(1);
-});
+// process.on("uncaughtException", (err) => {
+//   console.log(err.name, err.message);
+//   console.log("UNHANDLED EXCEPTION 💥 Shutting down...");
+//   process.exit(1);
+// });
 
 //
 

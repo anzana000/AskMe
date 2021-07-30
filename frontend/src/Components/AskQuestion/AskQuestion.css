@@ -1,0 +1,24 @@
+/* ask question page styling */
+.ask-container {
+  width: 400px;
+  display: grid;
+  place-items: center;
+}
+
+.ask-container h3 {
+  font-size: 18px;
+}
+
+.ask-container textarea {
+  resize: none;
+  width: 400px;
+  height: 200px;
+}
+
+.ask-container textarea::placeholder {
+  font-size: 14px;
+}
+
+.ask-button {
+  width: 200px;
+}

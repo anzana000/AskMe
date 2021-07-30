@@ -1,0 +1,42 @@
+.navbar {
+  position: relative;
+}
+
+.navbar-brand {
+  color: blue;
+}
+.navbar-nav li {
+  margin-right: 2rem;
+}
+
+.navbar-nav li a .MuiSvgIcon-root {
+  font-size: 24px;
+}
+
+.navbar-nav li a .MuiSvgIcon-root:hover {
+  color: #198754;
+}
+
+.search-button {
+  border-radius: 4px;
+}
+
+.form {
+  margin-right: 100px;
+}
+
+.user {
+  position: absolute;
+  top: 21%;
+  right: 0;
+}
+
+.user img {
+  height: 35px;
+  width: 35px;
+  cursor: pointer;
+}
+
+.present .MuiSvgIcon-root {
+  color: #198754;
+}

@@ -4,16 +4,23 @@ const APIFeatures = require("../utils/apiFeatures");
 
 exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    const newQuestion = await Question.create(req.body);
+    if (!req.body.user) req.body.user = req.user;
+    if (req.body.role) delete req.body.role;
+    if (req.body.like) delete req.body.like;
+    if (req.body.noOfLikes) delete req.body.noOfLikes;
+
+    const doc = await Model.create(req.body);
     res.status(201).json({
       status: "success",
-      data: newQuestion,
+      data: doc,
     });
   });
 
-exports.getOne = (Model) =>
+exports.getOne = (Model, popOption) =>
   catchAsync(async (req, res, next) => {
-    const doc = await Model.findById(req.params.id);
+    let query = Model.findById(req.params.id);
+    if (popOption) query = query.populate(popOption);
+    const doc = await query;
 
     if (!doc) {
       return next(new AppError("No document found with that id", 404));
@@ -26,24 +33,45 @@ exports.getOne = (Model) =>
 
 exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
-    const features = new APIFeatures(Model.find(), req.query)
+    //To allow for nested GET review on Question {hack}
+    let filter = {};
+    if (req.params.askId) filter = { question: req.params.askId };
+
+    //*EXECUTE QUERY
+    const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
       .sort()
-      .paginate()
-      .limitFields();
+      .limitFields()
+      .paginate();
+    // const doc = await features.query.explain();
     const doc = await features.query;
 
+    //*SEND RESPONSE
     res.status(200).json({
       status: "success",
+
       results: doc.length,
-      data: doc,
+      data: {
+        data: doc,
+      },
     });
   });
 
-exports.deleteOne = (Model) =>
+exports.deleteOne = (Model, mode) =>
   catchAsync(async (req, res, next) => {
-    const doc = await Model.findByIdAndDelete(req.params.id);
+    //! Check if the currently logged in user has created th document
+    const document = await Model.findById(req.params.id);
+    let id_user;
+    if (mode === "answer") id_user = document.user._id;
+    if (mode === "question") id_user = document.user.find((i) => i._id)._id;
 
+    console.log(id_user, req.user._id);
+    if (!id_user.equals(req.user._id))
+      return next(
+        new AppError("You are not allowed to perform this action", 403)
+      );
+
+    const doc = await Model.findByIdAndDelete(req.params.id);
     if (!doc) {
       return next(new AppError("No document found with that id", 404));
     }
@@ -53,22 +81,29 @@ exports.deleteOne = (Model) =>
     });
   });
 
-exports.updateOne = (Model) =>
+exports.updateOne = (Model, mode) =>
   catchAsync(async (req, res, next) => {
-    const question = await Question.findByIdAndUpdate(
-      req.params.id,
-      { question: req.body.question },
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    //! Check if the currently logged in user has created th document
+    const document = await Model.findById(req.params.id);
+    let id_user;
+    if (mode === "answer") id_user = document.user._id;
+    if (mode === "question") id_user = document.user.find((i) => i._id)._id;
 
-    if (!question) {
-      return next(new AppError("No question found with that id", 404));
+    console.log(id_user, req.user._id);
+    if (!id_user.equals(req.user._id))
+      return next(
+        new AppError("You are not allowed to perform this action", 403)
+      );
+    const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!doc) {
+      return next(new AppError("No document found with that id", 404));
     }
     res.status(201).json({
       status: "success",
-      data: question,
+      data: doc,
     });
   });
