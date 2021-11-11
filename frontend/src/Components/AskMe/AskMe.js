@@ -21,8 +21,8 @@ const AskMe = () => {
                 </div>
                 <h3>What is javascript?Which is the most trending javascript library today?</h3>
                 <div className="socials">
-                    <span id = "like">Like</span>
-                    <span>Comment</span>
+                    <span id = "like">Like <small>1</small></span>
+                    <span>Answers <small>0</small></span>
                     <span>Share</span>
                 </div>
             </div>
