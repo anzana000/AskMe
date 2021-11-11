@@ -1,0 +1,9 @@
+div.noti {
+  width: 100vw;
+  height: 500px;
+  background-color: cadetblue;
+  color: aliceblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

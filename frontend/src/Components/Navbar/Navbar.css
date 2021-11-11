@@ -40,3 +40,37 @@
 .present .MuiSvgIcon-root {
   color: #198754;
 }
+
+.user-profile {
+  position: absolute;
+  right: 0.2%;
+  top: 9.8%;
+  padding: 25px 5px;
+  height: 300px;
+  width: 250px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 4px;
+  display: none;
+}
+
+.user-profile ul li {
+  list-style-type: none;
+}
+
+.user-profile ul li a {
+  text-decoration: none;
+  color: gray;
+}
+
+.user-profile ul li a:hover {
+  color: black;
+}
+
+.display {
+  display: block;
+}
+
+.links {
+  color: #198754;
+}

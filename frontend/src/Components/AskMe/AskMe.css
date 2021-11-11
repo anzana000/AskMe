@@ -1,0 +1,59 @@
+.askme {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.askme input {
+  width: 300px;
+  border: none;
+  outline: none;
+  padding: 10px 15px;
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  border-bottom: 1px solid rgb(151, 149, 149);
+}
+
+.questions {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 35%;
+  left: 20%;
+}
+
+.questions h3 {
+  font-size: 20px;
+}
+
+.top-section {
+  display: flex;
+  margin-bottom: 10px;
+}
+.top-section img {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+
+.top-section h4 {
+  font-size: 16px;
+  position: absolute;
+  top: 8%;
+  left: 7%;
+  color: gray;
+  font-weight: 400;
+}
+
+.socials span {
+  font-size: 13px;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.like {
+  color: #198754;
+  font-weight: bold;
+}
