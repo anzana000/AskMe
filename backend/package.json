@@ -4,7 +4,8 @@
   "description": "Quora clone's backend",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "backend": "nodemon server"
   },
   "author": "Ashish",
   "license": "ISC",

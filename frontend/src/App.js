@@ -1,24 +1,23 @@
-import './App.css';
+import "./App.css";
 import Navbar from "./Components/Navbar/Navbar";
-import AskQuestion from './Components/AskQuestion/AskQuestion';
+import AskQuestion from "./Components/AskQuestion/AskQuestion";
 import Notification from "./Components/Notification/Notification";
-import AskMe from './Components/AskMe/AskMe';
+import AskMe from "./Components/AskMe/AskMe";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
   return (
     <Router>
-    <div className="App">
+      <div className="App">
         <Navbar />
-       
-      <Switch>
+
+        <Switch>
           <Route path="/askquestion" component={AskQuestion} />
           <Route path="/notification" component={Notification} />
-          <Route path = "/askme" component = {AskMe}/>
-      </Switch>
-      
+          <Route path="/" component={AskMe} />
+        </Switch>
       </div>
-      </Router>
+    </Router>
   );
 }
 
