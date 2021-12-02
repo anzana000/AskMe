@@ -31,18 +31,25 @@ const askSchema = new mongoose.Schema(
   }
 );
 
+// **************************************************************
 //virtual like
 askSchema.virtual("noOfLikes").get(function () {
   return this.likes.length;
 });
 
-//Virtual populate
+// **************************************************************
+//Virtual populate answers
 askSchema.virtual("answers", {
   ref: "Answer",
   foreignField: "question",
   localField: "_id",
 });
-
+// **************************************************************
+//No of answers
+askSchema.virtual("noOfAnswers").get(function () {
+  return this.answers.length;
+});
+// **************************************************************
 askSchema.pre(/^find/, function (next) {
   this.populate({
     // 'this' points to current query
@@ -51,7 +58,7 @@ askSchema.pre(/^find/, function (next) {
   });
   next();
 });
-
+// **************************************************************
 askSchema.pre(/^find/, function (next) {
   this.populate({
     // 'this' points to current query
@@ -60,7 +67,7 @@ askSchema.pre(/^find/, function (next) {
   });
   next();
 });
-
+// **************************************************************
 const Question = mongoose.model("Question", askSchema);
 
 module.exports = Question;
