@@ -96,6 +96,9 @@ const Login = () => {
             <button onClick={handleLogin} className="btn btn-primary">
               login
             </button>
+            <label for="checkbox">
+              Not a user? <span>Signup</span>
+            </label>
           </div>
         </section>
 
@@ -139,6 +142,9 @@ const Login = () => {
             <button onClick={handleSignup} className="btn btn-primary">
               Signup
             </button>
+            <label for="checkbox">
+              Already a user? <span>Login</span>
+            </label>
           </div>
         </section>
       </div>

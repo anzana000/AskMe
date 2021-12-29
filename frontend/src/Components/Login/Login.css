@@ -1,5 +1,5 @@
 img {
-  max-width: 100%;
+  max-width: 130%;
   object-fit: cover;
 }
 .login-container {
@@ -8,11 +8,11 @@ img {
 }
 
 #checkbox:checked ~ div > .login {
-  transform: rotateX(-180deg);
+  transform: rotateY(-180deg);
 }
 
 #checkbox:checked ~ div > .signup {
-  transform: rotateX(0deg);
+  transform: rotateY(0deg);
 }
 
 .login-container div {
@@ -21,7 +21,7 @@ img {
   width: 80%;
   perspective: 1500rem;
   transform-style: preserve-3d;
-  height: 20rem;
+  height: 30rem;
   overflow: hidden;
 }
 
@@ -29,16 +29,39 @@ img {
   display: flex;
   transition: all 0.5s ease-in-out;
   backface-visibility: hidden;
+  height: 100%;
 }
 
 .page > div {
-  flex: 50%;
+  flex: 45%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.page > div > label {
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+.page > div > label > span {
+  color: #085ed6;
+}
+
+.page > div > input {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+}
+.page > div > input:last-of-type {
+  margin-bottom: 1rem;
 }
 
 .page .img {
-  flex: 50%;
+  flex: 55%;
   height: 100%;
+
+  clip-path: polygon(0 0, 100% 0%, 90% 100%, 0 100%);
 }
 
 .login {
@@ -46,9 +69,11 @@ img {
   top: 0;
   left: 0;
   width: 100%;
-  transform: rotateX(0deg);
+  transform: rotateY(0deg);
+  background-color: #a6aba1;
 }
 
 .signup {
-  transform: rotateX(180deg);
+  transform: rotateY(180deg);
+  background-color: #eee;
 }
