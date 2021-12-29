@@ -1,0 +1,54 @@
+img {
+  max-width: 100%;
+  object-fit: cover;
+}
+.login-container {
+  margin-top: 10rem;
+  width: 100%;
+}
+
+#checkbox:checked ~ div > .login {
+  transform: rotateX(-180deg);
+}
+
+#checkbox:checked ~ div > .signup {
+  transform: rotateX(0deg);
+}
+
+.login-container div {
+  position: relative;
+  margin-inline: auto;
+  width: 80%;
+  perspective: 1500rem;
+  transform-style: preserve-3d;
+  height: 20rem;
+  overflow: hidden;
+}
+
+.page {
+  display: flex;
+  transition: all 0.5s ease-in-out;
+  backface-visibility: hidden;
+}
+
+.page > div {
+  flex: 50%;
+  height: 100%;
+}
+
+.page .img {
+  flex: 50%;
+  height: 100%;
+}
+
+.login {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform: rotateX(0deg);
+}
+
+.signup {
+  transform: rotateX(180deg);
+}

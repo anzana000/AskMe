@@ -14,9 +14,9 @@ const AskQuestion = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const newQuestion = { ...question };
-
+    console.log(newQuestion);
     axios
-      .post("/api/v1/ask", newQuestion)
+      .post("/api/v1/ask", question)
       .then((response) => {
         console.log(response);
       })
@@ -25,6 +25,7 @@ const AskQuestion = () => {
           status: err.response.data.status,
           message: err.response.data.message,
         });
+        console.log(err);
       });
     setQuestion({ question: " " });
   };
