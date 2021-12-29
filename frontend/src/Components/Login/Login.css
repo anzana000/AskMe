@@ -1,3 +1,6 @@
+#checkbox {
+  display: none;
+}
 img {
   max-width: 130%;
   object-fit: cover;
@@ -30,6 +33,7 @@ img {
   transition: all 0.5s ease-in-out;
   backface-visibility: hidden;
   height: 100%;
+  box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.9);
 }
 
 .page > div {
