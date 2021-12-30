@@ -8,6 +8,7 @@ const AskMe = () => {
   //     like.classList.add("like");
   // }
 
+
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -50,6 +51,9 @@ const AskMe = () => {
               <span>{d.answers.length}</span>
               <span>Answers</span>
               <span>Share</span>
+
+         
+         
             </div>
           </div>
         );
