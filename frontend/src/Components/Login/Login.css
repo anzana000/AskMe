@@ -1,0 +1,110 @@
+#checkbox {
+  display: none;
+}
+img {
+  max-width: 130%;
+  object-fit: cover;
+  height: 100%;
+}
+.login-container {
+  margin-top: 10rem;
+  width: 100%;
+}
+
+.login-container > div {
+  box-shadow: inset 0px 0 1rem 0rem;
+}
+
+#checkbox:checked ~ div > .login {
+  transform: rotateY(-180deg);
+}
+
+#checkbox:checked ~ div > .signup {
+  transform: rotateY(0deg);
+}
+
+.login-container div {
+  position: relative;
+  margin-inline: auto;
+  width: 80%;
+  perspective: 1500rem;
+  transform-style: preserve-3d;
+  height: 30rem;
+  overflow: hidden;
+}
+
+.page {
+  display: flex;
+  transition: all 0.5s ease-in-out;
+  backface-visibility: hidden;
+  height: 100%;
+}
+
+.page > div {
+  flex: 45%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.page > div > label {
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+.page > div > label > span {
+  color: #085ed6;
+}
+
+.page > div > input {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+}
+.page > div > input:last-of-type {
+  margin-bottom: 1rem;
+}
+
+.page .img {
+  flex: 55%;
+  height: 100%;
+
+  clip-path: polygon(0 0, 100% 0%, 90% 100%, 0 100%);
+}
+
+.login {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform: rotateY(0deg);
+  background-color: #a6aba1;
+}
+
+.signup {
+  transform: rotateY(180deg);
+  background-color: #eee;
+}
+
+@media screen and (max-width: 768px) {
+  .page .img {
+    position: absolute;
+    opacity: 0.3;
+  }
+
+  .login {
+    transform: rotateX(0deg);
+  }
+
+  .signup {
+    transform: rotateX(180deg);
+  }
+
+  #checkbox:checked ~ div > .login {
+    transform: rotateX(-180deg);
+  }
+
+  #checkbox:checked ~ div > .signup {
+    transform: rotateX(0deg);
+  }
+}
