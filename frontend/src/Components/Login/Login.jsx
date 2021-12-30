@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import axios from "axios";
 import "./Login.css";
 import img1 from "./login.jpg";
@@ -34,6 +34,7 @@ const Login = () => {
         })
         .catch((err) => {
           console.log(err);
+          alert("Invalid Credentials");
         });
     }
     log();
@@ -98,6 +99,9 @@ const Login = () => {
             </button>
             <label for="checkbox">
               Not a user? <span>Signup</span>
+            </label>
+            <label>
+              <Link to="/forgot">Don't remember your password?</Link>
             </label>
           </div>
         </section>

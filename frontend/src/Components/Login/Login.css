@@ -4,10 +4,15 @@
 img {
   max-width: 130%;
   object-fit: cover;
+  height: 100%;
 }
 .login-container {
   margin-top: 10rem;
   width: 100%;
+}
+
+.login-container > div {
+  box-shadow: inset 0px 0 1rem 0rem;
 }
 
 #checkbox:checked ~ div > .login {
@@ -33,7 +38,6 @@ img {
   transition: all 0.5s ease-in-out;
   backface-visibility: hidden;
   height: 100%;
-  box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.9);
 }
 
 .page > div {
@@ -80,4 +84,27 @@ img {
 .signup {
   transform: rotateY(180deg);
   background-color: #eee;
+}
+
+@media screen and (max-width: 768px) {
+  .page .img {
+    position: absolute;
+    opacity: 0.3;
+  }
+
+  .login {
+    transform: rotateX(0deg);
+  }
+
+  .signup {
+    transform: rotateX(180deg);
+  }
+
+  #checkbox:checked ~ div > .login {
+    transform: rotateX(-180deg);
+  }
+
+  #checkbox:checked ~ div > .signup {
+    transform: rotateX(0deg);
+  }
 }
