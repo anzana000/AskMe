@@ -2,17 +2,19 @@ import React, { useContext } from "react";
 import "./Navbar.css";
 import HomeIcon from "@material-ui/icons/Home";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import HelpIcon from "@material-ui/icons/Help";
 import SearchIcon from "@material-ui/icons/Search";
 import user from "./user.png";
 import { Link } from "react-router-dom";
 
-import { LoginContext } from "../../Context";
+import { LoginContext, MeContext } from "../../Context";
 
 const Navbar = () => {
-  const userProfile = () => {
-    const userProf = document.getElementById("user-prof");
-    userProf.classList.toggle("display");
+  const { loginStatus, setLoginStatus } = useContext(LoginContext);
+  const { me, setMe } = useContext(MeContext);
+
+  const logout = (e) => {
+    setLoginStatus(false);
+    setMe({});
   };
   return (
     <div>
@@ -36,39 +38,34 @@ const Navbar = () => {
             <ul class="navbar-nav m-auto mb-2 mb-lg-0">
               <li class="nav-item">
                 <Link
-                  class="nav-link active present"
+                  class="nav-link active present linkk"
                   aria-current="page"
                   to="/"
                 >
                   <HomeIcon />
                 </Link>
               </li>
+
               <li class="nav-item">
-                {/* <a class="nav-link " aria-current="page" href="/askquestion"> */}
-                <Link
-                  to="/askquestion"
-                  class="nav-link "
+                <a
+                  class="nav-link linkk"
                   aria-current="page"
-                  className="links"
+                  href="./index.html"
                 >
-                  <HelpIcon />
-                </Link>
-                {/* </a> */}
-              </li>
-              <li class="nav-item">
-                <a class="nav-link " aria-current="page" href="./index.html">
                   <Link to="/notification" className="links">
                     <NotificationsIcon />
                   </Link>
                 </a>
               </li>
             </ul>
-            {!useContext(LoginContext).loginStatus ? (
+            {!loginStatus ? (
               <Link class="navbar-brand" to="/login">
                 Login/Signup
               </Link>
             ) : (
-              ""
+              <Link onClick={(e) => logout(e)} class="navbar-brand" to="/login">
+                Logout
+              </Link>
             )}
 
             <form class="d-flex form">
@@ -85,28 +82,12 @@ const Navbar = () => {
                 <SearchIcon />
               </button>
               <div class="mx-5 user">
-                <img src={user} alt="user" onClick={userProfile} />
+                <img src={user} alt="user" />
               </div>
             </form>
           </div>
         </div>
       </nav>
-      <div className="user-profile" id="user-prof">
-        <ul>
-          <li>
-            <a href="">Your profile</a>
-          </li>
-          <li>
-            <a href="">something</a>
-          </li>
-          <li>
-            <a href="">Help</a>
-          </li>
-          <li>
-            <a href="">Settings</a>
-          </li>
-        </ul>
-      </div>
     </div>
   );
 };

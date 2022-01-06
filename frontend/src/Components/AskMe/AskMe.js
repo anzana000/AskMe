@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 import "./AskMe.css";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
@@ -6,8 +7,10 @@ import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
 
 import { LoginContext, MeContext } from "../../Context";
+import AskQuestion from "../AskQuestion/AskQuestion";
 
 const AskMe = () => {
+  const history = useHistory();
   const [data, setData] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const { loginStatus, setLoginStatus } = useContext(LoginContext);
@@ -45,6 +48,8 @@ const AskMe = () => {
         setRefresh(!refresh);
       }
       func();
+    } else {
+      history.push("/login");
     }
   };
 
@@ -65,7 +70,11 @@ const AskMe = () => {
                 />
               </div>
               <div className="delete__container df">
-                <h4 className="questions__top__name"> {d.user[0].name}</h4>
+                <h4 className="questions__top__name">
+                  {" "}
+                  {d.user[0].name.charAt(0).toUpperCase() +
+                    d.user[0].name.slice(1)}
+                </h4>
                 {id === d.user[0]._id ? (
                   <div
                     onClick={(e) => deletePost(d._id)}
@@ -95,6 +104,9 @@ const AskMe = () => {
           </div>
         );
       })}
+      <div className="pf">
+        <AskQuestion />
+      </div>
     </div>
   );
 };

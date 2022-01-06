@@ -59,7 +59,7 @@ const Login = () => {
       await axios
         .post("/api/v1/users/signup", send)
         .then((res) => {
-          history.push("/login");
+          history.push("/");
         })
         .catch((err) => {
           alert("Invalid Credentials");
