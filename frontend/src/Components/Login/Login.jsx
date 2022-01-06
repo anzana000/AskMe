@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import axios from "axios";
 import "./Login.css";
 import img1 from "./login.jpg";
 import img2 from "./signup.jpg";
+import { LoginContext, MeContext } from "../../Context";
 
 const Login = () => {
   const history = useHistory();
+
+  const { loginStatus, setLoginStatus } = useContext(LoginContext);
+  const { me, setMe } = useContext(MeContext);
 
   const [signup, setSignup] = useState({
     name: "",
@@ -19,8 +23,6 @@ const Login = () => {
     password: "",
   });
 
-  const [loginStatus, setLoginStatus] = useState(false);
-
   ////////////////////////////////////////////////////////////////
   const handleLogin = (e) => {
     e.preventDefault();
@@ -29,11 +31,15 @@ const Login = () => {
       await axios
         .post("/api/v1/users/login", send)
         .then((res) => {
-          console.log(res.status);
           setLoginStatus(true);
+          async function fun() {
+            await axios.get("/api/v1/users/getMe/").then((res) => {
+              setMe(res.data.data);
+            });
+          }
+          fun();
         })
         .catch((err) => {
-          console.log(err);
           alert("Invalid Credentials");
         });
     }
@@ -53,11 +59,10 @@ const Login = () => {
       await axios
         .post("/api/v1/users/signup", send)
         .then((res) => {
-          console.log(res.status);
           history.push("/");
         })
         .catch((err) => {
-          console.log(err);
+          alert("Invalid Credentials");
         });
     }
     log();
@@ -67,7 +72,6 @@ const Login = () => {
   if (loginStatus) {
     history.push("/");
   }
-  console.log(signup);
   return (
     <div className="login-container">
       <input type="checkbox" id="checkbox" />
