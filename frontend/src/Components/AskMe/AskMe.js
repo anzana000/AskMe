@@ -8,12 +8,8 @@ import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
 import { MeContext } from "../../Context";
 
 const AskMe = () => {
-  // const like = document.getElementById("span#like");
-  // const likeClicked = () => {
-  //     like.classList.add("like");
-  // }
-
   const [data, setData] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     async function data() {
@@ -21,22 +17,30 @@ const AskMe = () => {
         .get("/api/v1/ask/")
         .then((res) => {
           const value = res.data.data.data;
-          //   console.log(value);
+          // console.log(value[0].id);
           setData(value);
         })
         .catch((err) => console.log(err));
     }
     data();
-  }, []);
+  }, [refresh]);
 
-  //   console.log(data);
+  const deletePost = (id) => {
+    async function fun() {
+      await axios
+        .delete(`/api/v1/ask/${id}`)
+        .then((res) => {
+          setRefresh(!refresh);
+        })
+        .catch((err) => console.log(err));
+    }
+    fun();
+  };
+
   const id = useContext(MeContext).me._id;
   return (
     <div className="questions-container">
       {data.map((d) => {
-        {
-          console.log(d.user[0]._id);
-        }
         return (
           <div className="questions">
             <div className="questions__top">
@@ -49,7 +53,10 @@ const AskMe = () => {
               <div className="delete__container df">
                 <h4 className="questions__top__name"> {d.user[0].name}</h4>
                 {id === d.user[0]._id ? (
-                  <div className="questions__top__delete">
+                  <div
+                    onClick={(e) => deletePost(d._id)}
+                    className="questions__top__delete"
+                  >
                     <DeleteForeverIcon />
                   </div>
                 ) : (

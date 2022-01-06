@@ -47,7 +47,9 @@ askSchema.virtual("answers", {
 // **************************************************************
 //No of answers
 askSchema.virtual("noOfAnswers").get(function () {
-  return this.answers.length;
+  if (this.answers === undefined) return 0;
+
+  this.answers.length;
 });
 // **************************************************************
 askSchema.pre(/^find/, function (next) {
