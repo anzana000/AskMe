@@ -5,11 +5,12 @@ import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
 
-import { MeContext } from "../../Context";
+import { LoginContext, MeContext } from "../../Context";
 
 const AskMe = () => {
   const [data, setData] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const { loginStatus, setLoginStatus } = useContext(LoginContext);
 
   useEffect(() => {
     async function data() {
@@ -37,10 +38,23 @@ const AskMe = () => {
     fun();
   };
 
+  const addLike = (id) => {
+    if (loginStatus) {
+      async function func() {
+        await axios.patch(`/api/v1/ask/${id}/likes`).then().catch();
+        setRefresh(!refresh);
+      }
+      func();
+    }
+  };
+
   const id = useContext(MeContext).me._id;
   return (
     <div className="questions-container">
       {data.map((d) => {
+        {
+          console.log(d.likes.includes(id));
+        }
         return (
           <div className="questions">
             <div className="questions__top">
@@ -68,7 +82,10 @@ const AskMe = () => {
             <div className="questions__socials">
               <span>{d.noOfLikes}</span>
               <span id="like">
-                <ThumbUpAltIcon color="primary" />
+                <ThumbUpAltIcon
+                  onClick={(e) => addLike(d._id)}
+                  color={d.likes.includes(id) ? "primary" : ""}
+                />
               </span>
               <span>{d.answers.length}</span>
               <span>
