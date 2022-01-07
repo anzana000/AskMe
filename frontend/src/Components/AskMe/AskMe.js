@@ -6,14 +6,15 @@ import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
 
-import { LoginContext, MeContext } from "../../Context";
+import { LoginContext, MeContext, RefreshContext } from "../../Context";
 import AskQuestion from "../AskQuestion/AskQuestion";
 
 const AskMe = () => {
   const history = useHistory();
   const [data, setData] = useState([]);
-  const [refresh, setRefresh] = useState(false);
+
   const { loginStatus, setLoginStatus } = useContext(LoginContext);
+  const { refresh, setRefresh } = useContext(RefreshContext);
 
   useEffect(() => {
     async function data() {

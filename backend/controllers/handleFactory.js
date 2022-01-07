@@ -62,7 +62,7 @@ exports.deleteOne = (Model, mode) =>
     //! Check if the currently logged in user has created th document
     const document = await Model.findById(req.params.id);
     let id_user;
-    console.log(document);
+
     if (mode === "answer") id_user = document.user._id;
     if (mode === "question") id_user = document.user.find((i) => i._id)._id;
 
@@ -90,7 +90,6 @@ exports.updateOne = (Model, mode) =>
     if (mode === "answer") id_user = document.user._id;
     if (mode === "question") id_user = document.user.find((i) => i._id)._id;
 
-    console.log(id_user, req.user._id);
     if (!id_user.equals(req.user._id))
       return next(
         new AppError("You are not allowed to perform this action", 403)

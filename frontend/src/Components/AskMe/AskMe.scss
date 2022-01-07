@@ -81,3 +81,30 @@
     width: 20%;
   }
 }
+
+@media screen and (max-width: 1150px) {
+  .questions-container {
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .pf {
+    right: 4rem;
+    overflow: hidden;
+    width: 28rem;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .questions-container {
+    width: 70%;
+    align-items: baseline;
+    margin-left: 2rem;
+  }
+
+  .pf {
+    overflow: hidden;
+    width: 20rem;
+  }
+}

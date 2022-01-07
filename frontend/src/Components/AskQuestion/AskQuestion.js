@@ -3,11 +3,12 @@ import { useHistory } from "react-router-dom";
 
 import "./AskQuestion.css";
 import axios from "axios";
-import { LoginContext } from "../../Context";
+import { LoginContext, RefreshContext } from "../../Context";
 
 const AskQuestion = () => {
   const history = useHistory();
   const { loginStatus, setLoginStatus } = useContext(LoginContext);
+  const { refresh, setRefresh } = useContext(RefreshContext);
 
   const [question, setQuestion] = useState({
     question: "",
@@ -27,16 +28,15 @@ const AskQuestion = () => {
       axios
         .post("/api/v1/ask", question)
         .then((response) => {
-          console.log(response);
+          setRefresh(!refresh);
+          setQuestion({ question: "" });
         })
         .catch((err) => {
           setError({
             status: err.response.data.status,
             message: err.response.data.message,
           });
-          console.log(err);
         });
-      setQuestion({ question: " " });
     }
   };
   return (
@@ -48,8 +48,8 @@ const AskQuestion = () => {
             type="text"
             class="form-control"
             name="question"
-            id=""
             placeholder="Type question here..."
+            value={question.question}
             onChange={(e) => setQuestion({ [e.target.name]: e.target.value })}
           ></textarea>
         </div>
